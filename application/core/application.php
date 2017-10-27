@@ -11,6 +11,18 @@ class Application {
     private $curent_route;
     private $hooks;
     
+    public function __construct() {
+        
+        $this->tokens = array(
+                    ':string' => '([a-zA-Z]+)',
+                    ':number' => '([0-9]+)',
+                    ':alpha'  => '([^\/]+)',
+                );
+        $this->handler_instance = null;
+        $this->request_method = strtolower($_SERVER['REQUEST_METHOD']); 
+        $this->HandleURL();
+    }
+    
     public function serve($routes) {
         
         $discovered_route_controller = null;
@@ -77,18 +89,6 @@ class Application {
     
             $this->fire('404');
         }
-    }
-
-    public function __construct() {
-        
-        $this->tokens = array(
-                    ':string' => '([a-zA-Z]+)',
-                    ':number' => '([0-9]+)',
-                    ':alpha'  => '([a-zA-Z0-9-_.,%\[\]=?]+)'
-                );
-        $this->handler_instance = null;
-        $this->request_method = strtolower($_SERVER['REQUEST_METHOD']); 
-        $this->HandleURL();
     }
     
     private function HandleURL() {
